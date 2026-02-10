@@ -169,8 +169,8 @@ pub fn rename_session(old: &str, new: &str) -> Result<()> {
 
 pub fn new_window(session: &str, name: Option<&str>) -> Result<()> {
     match name {
-        Some(n) if !n.is_empty() => run_tmux(&["new-window", "-t", session, "-n", n])?,
-        _ => run_tmux(&["new-window", "-t", session])?,
+        Some(n) if !n.is_empty() => run_tmux(&["new-window", "-d", "-t", session, "-n", n])?,
+        _ => run_tmux(&["new-window", "-d", "-t", session])?,
     };
     Ok(())
 }
