@@ -115,6 +115,8 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
         "#{pane_current_command}",
         "#{pane_width}",
         "#{pane_height}",
+        "#{pane_top}",
+        "#{pane_left}",
         "#{pane_current_path}",
     ]
     .join(FIELD_SEP);
@@ -127,7 +129,7 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
             continue;
         }
         let fields: Vec<&str> = line.split(FIELD_SEP).collect();
-        if fields.len() < 7 {
+        if fields.len() < 9 {
             continue;
         }
         panes.push(TmuxPane {
@@ -137,7 +139,9 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
             command: fields[3].to_string(),
             width: fields[4].parse().unwrap_or(0),
             height: fields[5].parse().unwrap_or(0),
-            cwd: fields[6].to_string(),
+            top: fields[6].parse().unwrap_or(0),
+            left: fields[7].parse().unwrap_or(0),
+            cwd: fields[8].to_string(),
         });
     }
 
@@ -165,8 +169,8 @@ pub fn rename_session(old: &str, new: &str) -> Result<()> {
 
 pub fn new_window(session: &str, name: Option<&str>) -> Result<()> {
     match name {
-        Some(n) if !n.is_empty() => run_tmux(&["new-window", "-t", session, "-n", n])?,
-        _ => run_tmux(&["new-window", "-t", session])?,
+        Some(n) if !n.is_empty() => run_tmux(&["new-window", "-d", "-t", session, "-n", n])?,
+        _ => run_tmux(&["new-window", "-d", "-t", session])?,
     };
     Ok(())
 }

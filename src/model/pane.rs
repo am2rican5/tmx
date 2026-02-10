@@ -8,5 +8,7 @@ pub struct TmuxPane {
     pub command: String,
     pub width: u32,
     pub height: u32,
+    pub top: u32,
+    pub left: u32,
     pub cwd: String,
 }

@@ -6,10 +6,25 @@ use ratatui::widgets::Paragraph;
 
 use crate::app::{App, Panel};
 use super::panel_block;
+use super::layout_minimap;
 
 pub fn draw_preview(frame: &mut Frame, app: &App, area: Rect) {
     let focused = app.focused == Panel::Preview;
     let block = panel_block("[4] Preview", focused);
+
+    // When Panes panel is focused, try rendering the layout minimap
+    if app.focused == Panel::Panes {
+        // Render the block first, then draw minimap in the inner area
+        let inner = block.inner(area);
+        frame.render_widget(block, area);
+        if !layout_minimap::draw_layout_minimap(frame, app, inner) {
+            // Fallback: minimap couldn't fit, render pane capture over the inner area
+            let content = render_pane_capture(app);
+            let fallback = Paragraph::new(content);
+            frame.render_widget(fallback, inner);
+        }
+        return;
+    }
 
     let content = match app.focused {
         Panel::Sessions => render_session_details(app),
