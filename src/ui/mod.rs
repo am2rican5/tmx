@@ -1,4 +1,5 @@
 mod help;
+mod layout_minimap;
 mod panes;
 mod preview;
 mod prompt;
