@@ -26,7 +26,7 @@ fn main() -> Result<()> {
     // Check tmux is available
     if !tmux::is_tmux_running() {
         eprintln!("Error: tmux server is not running.");
-        eprintln!("Start tmux first, then run tmx.");
+        eprintln!("Start tmux first, then run tmmx.");
         std::process::exit(1);
     }
 
