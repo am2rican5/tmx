@@ -7,4 +7,6 @@ pub struct TmuxWindow {
     pub id: String,
     pub active: bool,
     pub panes: u32,
+    pub layout: String,
+    pub flags: String,
 }

@@ -11,4 +11,6 @@ pub struct TmuxPane {
     pub top: u32,
     pub left: u32,
     pub cwd: String,
+    pub pid: u32,
+    pub title: String,
 }

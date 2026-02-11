@@ -47,6 +47,7 @@ pub fn list_sessions() -> Result<Vec<TmuxSession>> {
         "#{session_windows}",
         "#{session_attached}",
         "#{session_created}",
+        "#{session_activity}",
     ]
     .join(FIELD_SEP);
 
@@ -58,7 +59,7 @@ pub fn list_sessions() -> Result<Vec<TmuxSession>> {
             continue;
         }
         let fields: Vec<&str> = line.split(FIELD_SEP).collect();
-        if fields.len() < 5 {
+        if fields.len() < 6 {
             continue;
         }
         sessions.push(TmuxSession {
@@ -67,6 +68,7 @@ pub fn list_sessions() -> Result<Vec<TmuxSession>> {
             windows: fields[2].parse().unwrap_or(0),
             attached: fields[3] != "0",
             created: fields[4].parse().unwrap_or(0),
+            last_activity: fields[5].parse().unwrap_or(0),
         });
     }
 
@@ -80,6 +82,8 @@ pub fn list_windows(session: &str) -> Result<Vec<TmuxWindow>> {
         "#{window_id}",
         "#{window_active}",
         "#{window_panes}",
+        "#{window_layout}",
+        "#{window_flags}",
     ]
     .join(FIELD_SEP);
 
@@ -91,7 +95,7 @@ pub fn list_windows(session: &str) -> Result<Vec<TmuxWindow>> {
             continue;
         }
         let fields: Vec<&str> = line.split(FIELD_SEP).collect();
-        if fields.len() < 5 {
+        if fields.len() < 7 {
             continue;
         }
         windows.push(TmuxWindow {
@@ -100,6 +104,8 @@ pub fn list_windows(session: &str) -> Result<Vec<TmuxWindow>> {
             id: fields[2].to_string(),
             active: fields[3] != "0",
             panes: fields[4].parse().unwrap_or(0),
+            layout: fields[5].to_string(),
+            flags: fields[6].to_string(),
         });
     }
 
@@ -118,6 +124,8 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
         "#{pane_top}",
         "#{pane_left}",
         "#{pane_current_path}",
+        "#{pane_pid}",
+        "#{pane_title}",
     ]
     .join(FIELD_SEP);
 
@@ -129,7 +137,7 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
             continue;
         }
         let fields: Vec<&str> = line.split(FIELD_SEP).collect();
-        if fields.len() < 9 {
+        if fields.len() < 11 {
             continue;
         }
         panes.push(TmuxPane {
@@ -142,6 +150,8 @@ pub fn list_panes(session: &str, window_index: u32) -> Result<Vec<TmuxPane>> {
             top: fields[6].parse().unwrap_or(0),
             left: fields[7].parse().unwrap_or(0),
             cwd: fields[8].to_string(),
+            pid: fields[9].parse().unwrap_or(0),
+            title: fields[10].to_string(),
         });
     }
 

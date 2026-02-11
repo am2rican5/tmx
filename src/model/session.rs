@@ -7,4 +7,5 @@ pub struct TmuxSession {
     pub windows: u32,
     pub attached: bool,
     pub created: u64,
+    pub last_activity: u64,
 }
