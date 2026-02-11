@@ -35,15 +35,23 @@ pub fn draw_windows(frame: &mut Frame, app: &mut App, area: Rect) {
         })
         .collect();
 
-    let list = List::new(items)
+    let highlight = if focused {
+        Style::default()
+            .fg(Color::Black)
+            .bg(Color::Cyan)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().add_modifier(Modifier::REVERSED)
+    };
+
+    let mut list = List::new(items)
         .block(block)
-        .highlight_style(
-            Style::default()
-                .fg(Color::Black)
-                .bg(Color::Cyan)
-                .add_modifier(Modifier::BOLD),
-        )
+        .highlight_style(highlight)
         .highlight_symbol("> ");
+
+    if !focused {
+        list = list.style(Style::default().fg(Color::DarkGray));
+    }
 
     frame.render_stateful_widget(list, area, &mut app.window_state);
 }
